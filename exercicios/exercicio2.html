@@ -61,10 +61,20 @@
                 var cellNome = linha.insertCell(0);
                 var cellTelefone = linha.insertCell(1);
                 var cellEmail = linha.insertCell(2);
+                var cellExcluir = linha.insertCell(3);
 
                 cellNome.textContent = usuario.nome;
                 cellTelefone.textContent = usuario.telefone;
                 cellEmail.textContent = usuario.email;
+
+                //testando 
+                var btnExcluir = document.createElement("button");
+                btnExcluir.textContent = "Excluir";
+                btnExcluir.onclick = function() {
+                    excluirUsuario(i);
+                };
+
+                cellExcluir.appendChild(btnExcluir);
             }
         }
 
@@ -79,6 +89,13 @@
                 }
             }
             return false;
+        }
+
+        function excluirUsuario(indice) {
+            if (confirm("Tem certeza que deseja excluir este usuário?")) {
+                usuarios.splice(indice, 1);
+                exibir();
+            }
         }
     </script>
 </body>
