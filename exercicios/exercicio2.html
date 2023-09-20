@@ -34,6 +34,16 @@
             var telefone = document.getElementById("telefone").value;
             var email = document.getElementById("email").value;
 
+            if (!validar(nome, telefone, email)){
+                alert("Preencha todos os campos antes de cadastrar!");
+                return;
+            }
+
+            if (usuarioExiste(email)) {
+                alert("Email já existe na lista.");
+                return;
+            }
+
             var usuario = { nome, telefone, email }; // Crie um objeto com as informações
             usuarios.push(usuario); // Adicione o objeto ao array
 
@@ -56,6 +66,19 @@
                 cellTelefone.textContent = usuario.telefone;
                 cellEmail.textContent = usuario.email;
             }
+        }
+
+        function validar(nome, telefone, email) {
+            return nome.trim() !=="" && telefone.trim() !=="" && email.trim() !=="";
+        }
+
+        function usuarioExiste (email) {
+            for (let i = 0; i < usuarios.length; i++){
+                if (usuarios[i].email === email){
+                    return true;
+                }
+            }
+            return false;
         }
     </script>
 </body>
