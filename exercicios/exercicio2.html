@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <input id="nome" type="text" placeholder="Digite nome..">
+    <input id="telefone" type="text" placeholder="Digite telefone..">
+    <input id="email" type="email" placeholder="Digite email..">
+
+    <button onclick="cadastrar()">Cadastrar</button>
+    <hr>
+
+    <table id="tabela" border="1">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Telefone</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        var usuarios = [];
+
+        function cadastrar() {
+            var nome = document.getElementById("nome").value;
+            var telefone = document.getElementById("telefone").value;
+            var email = document.getElementById("email").value;
+
+            var usuario = { nome, telefone, email }; // Crie um objeto com as informações
+            usuarios.push(usuario); // Adicione o objeto ao array
+
+            exibir();
+        }
+
+        function exibir() {
+            var tabela = document.getElementById("tabela");
+            var tbody = tabela.getElementsByTagName("tbody")[0];
+            tbody.innerHTML = "";
+
+            for (let i = 0; i < usuarios.length; i++) {
+                var usuario = usuarios[i];
+                var linha = tbody.insertRow(i);
+                var cellNome = linha.insertCell(0);
+                var cellTelefone = linha.insertCell(1);
+                var cellEmail = linha.insertCell(2);
+
+                cellNome.textContent = usuario.nome;
+                cellTelefone.textContent = usuario.telefone;
+                cellEmail.textContent = usuario.email;
+            }
+        }
+    </script>
+</body>
+
+</html>
