@@ -21,6 +21,7 @@
                 <th>Nome</th>
                 <th>Telefone</th>
                 <th>Email</th>
+                <th>Ação</th>
             </tr>
         </thead>
         <tbody></tbody>
@@ -34,7 +35,7 @@
             var telefone = document.getElementById("telefone").value;
             var email = document.getElementById("email").value;
 
-            if (!validar(nome, telefone, email)){
+            if (!validar(nome, telefone, email)) {
                 alert("Preencha todos os campos antes de cadastrar!");
                 return;
             }
@@ -44,8 +45,8 @@
                 return;
             }
 
-            var usuario = { nome, telefone, email }; // Crie um objeto com as informações
-            usuarios.push(usuario); // Adicione o objeto ao array
+            var usuario = { nome, telefone, email };
+            usuarios.push(usuario);
 
             exibir();
         }
@@ -61,30 +62,36 @@
                 var cellNome = linha.insertCell(0);
                 var cellTelefone = linha.insertCell(1);
                 var cellEmail = linha.insertCell(2);
-                var cellExcluir = linha.insertCell(3);
+                var cellAcao = linha.insertCell(3);
 
                 cellNome.textContent = usuario.nome;
                 cellTelefone.textContent = usuario.telefone;
                 cellEmail.textContent = usuario.email;
 
-                //testando 
                 var btnExcluir = document.createElement("button");
                 btnExcluir.textContent = "Excluir";
                 btnExcluir.onclick = function() {
                     excluirUsuario(i);
                 };
 
-                cellExcluir.appendChild(btnExcluir);
+                var btnEditar = document.createElement("button");
+                btnEditar.textContent = "Editar";
+                btnEditar.onclick = function() {
+                    editarUsuario(i);
+                };
+
+                cellAcao.appendChild(btnExcluir);
+                cellAcao.appendChild(btnEditar);
             }
         }
 
         function validar(nome, telefone, email) {
-            return nome.trim() !=="" && telefone.trim() !=="" && email.trim() !=="";
+            return nome.trim() !== "" && telefone.trim() !== "" && email.trim() !== "";
         }
 
-        function usuarioExiste (email) {
-            for (let i = 0; i < usuarios.length; i++){
-                if (usuarios[i].email === email){
+        function usuarioExiste(email, indiceEditar) {
+            for (let i = 0; i < usuarios.length; i++) {
+                if (i !== indiceEditar && usuarios[i].email === email) {
                     return true;
                 }
             }
@@ -96,6 +103,60 @@
                 usuarios.splice(indice, 1);
                 exibir();
             }
+        }
+
+        function editarUsuario(indice) {
+            var usuario = usuarios[indice];
+            
+            var inputNomeEditar = document.createElement("input");
+            inputNomeEditar.type = "text";
+            inputNomeEditar.value = usuario.nome;
+            var inputTelefoneEditar = document.createElement("input");
+            inputTelefoneEditar.type = "text";
+            inputTelefoneEditar.value = usuario.telefone;
+            var inputEmailEditar = document.createElement("input");
+            inputEmailEditar.type = "email";
+            inputEmailEditar.value = usuario.email;
+
+            var btnSalvar = document.createElement("button");
+            btnSalvar.textContent = "Salvar";
+            btnSalvar.onclick = function() {
+                salvarEdicao(indice, inputNomeEditar.value, inputTelefoneEditar.value, inputEmailEditar.value);
+            };
+
+            var tabela = document.getElementById("tabela");
+            var tbody = tabela.getElementsByTagName("tbody")[0];
+            tbody.deleteRow(indice);
+            var linha = tbody.insertRow(indice);
+
+            var cellNome = linha.insertCell(0);
+            var cellTelefone = linha.insertCell(1);
+            var cellEmail = linha.insertCell(2);
+            var cellAcao = linha.insertCell(3);
+
+            cellNome.appendChild(inputNomeEditar);
+            cellTelefone.appendChild(inputTelefoneEditar);
+            cellEmail.appendChild(inputEmailEditar);
+            cellAcao.appendChild(btnSalvar);
+        }
+
+        function salvarEdicao(indice, novoNome, novoTelefone, novoEmail) {
+            if (!validar(novoNome, novoTelefone, novoEmail)) {
+                alert("Preencha todos os campos antes de salvar a edição.");
+                return;
+            }
+
+            if (usuarioExiste(novoEmail, indice)) {
+                alert("Email já existe na lista.");
+                return;
+            }
+
+            var usuario = usuarios[indice];
+            usuario.nome = novoNome;
+            usuario.telefone = novoTelefone;
+            usuario.email = novoEmail;
+
+            exibir();
         }
     </script>
 </body>
